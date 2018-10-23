@@ -1,0 +1,199 @@
+Building configuration...
+
+Current configuration : 4363 bytes
+!
+! Last configuration change at 09:35:25 UTC Tue Oct 23 2018 by ec2-user
+!
+version 16.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform console virtual
+!
+hostname ip-172-16-211-222
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition GS
+ rd 100:100
+ !
+ address-family ipv4
+ exit-address-family
+!
+logging persistent size 1000000 filesize 8192 immediate
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+ip admission watch-list expiry-time 0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2925146273
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2925146273
+ revocation-check none
+ rsakeypair TP-self-signed-2925146273
+!
+!
+crypto pki certificate chain TP-self-signed-2925146273
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32393235 31343632 3733301E 170D3138 31303233 30393035 
+  30385A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 39323531 
+  34363237 33308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 01009B14 9A859801 429FD13D 752A5D5C FFAF64F9 772377E7 5117780D 
+  699E06CE CEEA480C 16FC61FE 5CC36DBF B358BF27 325B3DFC FE0C49A0 D4BBFC39 
+  0E7D30A1 D75ABC18 88E368BB 0F4ED12D D81BE7E5 E69F8D1B 8EDD2EC0 12A29AD8 
+  E40351A1 92C2E0C7 DE2BFD32 083558D7 BD19C20E 65DE9922 45C05824 599B545B 
+  FFF51166 ADCBA0EF DD190703 56C1475B D9C04C7A 297304AF 0409F041 229354FB 
+  10770F78 DF3C4C27 DD25B0EF 8044F2CE EA0E451F D1447495 104CA432 8CE69039 
+  0BA2A276 EBDC591D 37F62003 75924148 CF9E4BFB 0DD97833 2A86BEFD CC043629 
+  FE53C23A 031EB541 AD3F87B8 354026FD 32689535 07725898 7CCFBCA0 B9A5DA45 
+  A6918D05 08830203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 14201F29 B4DA96EA B9D4FAA9 F7382FB6 F3D4FA8B 
+  84301D06 03551D0E 04160414 201F29B4 DA96EAB9 D4FAA9F7 382FB6F3 D4FA8B84 
+  300D0609 2A864886 F70D0101 05050003 82010100 2337595A 3D56AC4A 64FEE76A 
+  9A291253 E426356B 1052D4A4 71CCB5BD 8BED54F8 003C5B79 1B642F36 82D66E67 
+  055E27A5 A7AAC8DE 0D0BBE27 EC950F47 19CEB0D9 056682AD E009847F 85B1F2B5 
+  32D359CF 8E503E06 A3CC5017 75946746 E5358CBA 366BB713 BB9BADF9 2698245E 
+  4D7AAF90 335EAEB8 7276FDF7 72203C74 5CA01F0C 9E6FE472 02EB7AE4 74323992 
+  93AAADE7 092A6167 7404B382 CAC58E46 E736CA50 FC72F335 F897DA2E 79D13DDE 
+  C361D1F4 04194051 C4C6C8D6 032C3F48 A7ABF60C B4356B3F FF59C82F 3A2C153D 
+  AD49D9CA 66BD178D 0877C23C 2C43CB30 89B286AB BC1F1882 088F79DB 6A175FD4 
+  2B6C6ECD A9BFAEEA B155597D 8AC5FC20 AD3BE20F
+  	quit
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 99ELKE4MTLO
+no license smart enable
+diagnostic bootup level minimal
+!
+spanning-tree extend system-id
+!
+!
+!
+username ec2-user privilege 15 secret 5 $1$tuej$.ua0nLjNMrIoDGBZN4OxQ0
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+!
+interface VirtualPortGroup0
+ vrf forwarding GS
+ ip address 192.168.35.101 255.255.255.0
+ ip nat inside
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet1
+ ip address dhcp
+ ip nat outside
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+iox
+ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 vrf GS overload
+ip forward-protocol nd
+ip tcp window-size 8192
+ip http server
+ip http authentication local
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.0.1
+ip route vrf GS 0.0.0.0 0.0.0.0 GigabitEthernet1 172.16.0.1 global
+!
+ip ssh rsa keypair-name ssh-key
+ip ssh version 2
+ip ssh pubkey-chain
+  username ec2-user
+   key-hash ssh-rsa 6C595F57A13AFD45AF698AF6059BA1B6 ec2-user
+ip scp server enable
+!
+!
+ip access-list standard GS_NAT_ACL
+ permit 192.168.35.0 0.0.0.255
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+banner motd ^C You have been pwned by the Urban Seagulls Hackers Collective. ^C
+!
+line con 0
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+!
+!
+!
+!
+app-hosting appid guestshell
+ app-vnic gateway1 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 192.168.35.102 netmask 255.255.255.0
+ app-default-gateway 192.168.35.101 guest-interface 0
+ name-server0 8.8.8.8
+end
